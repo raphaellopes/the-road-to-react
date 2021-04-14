@@ -19,15 +19,26 @@ const stories = [
   },
 ];
 
+// hooks
+const useSemiPersistentState = (key, initialValue) => {
+  const [value, setValue] = useState(localStorage.getItem(key) || initialValue);
+
+  useEffect(() => {
+    localStorage.setItem(key, value);
+  }, [value, key]);
+
+  return [value, setValue];
+}
+
 // components
-const Search = ({ search, onSearch }) => (
+const InputWithLabel = ({ id, type = 'text', value, onInputChange, children }) => (
   <>
-    <label htmlFor="search">Search:</label>
+    <label htmlFor={id}>{children}</label>&nbsp;
     <input
-      id="search"
-      type="text"
-      value={search}
-      onChange={onSearch}
+      id={id}
+      type={type}
+      value={value}
+      onChange={onInputChange}
     />
   </>
 );
@@ -52,24 +63,24 @@ const List = ({ list }) =>
 
 // root component
 const App = () => {
-  const [searchTerm, setSearchTerm] = useState(localStorage.getItem('search') || 'React');
+  const [searchTerm, setSearchTerm] = useSemiPersistentState('search', '');
   const searchedStories = stories.filter(({ title }) =>
     title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleSearch = e => {
-    setSearchTerm(e.currentTarget.value)
-  }
-
-  useEffect(() => {
-    localStorage.setItem('search', searchTerm);
-  }, [searchTerm])
+  const handleSearch = e => setSearchTerm(e.currentTarget.value);
 
   return (
     <div>
       <p>Hello rasta</p>
 
-      <Search search={searchTerm} onSearch={handleSearch} />
+      <InputWithLabel
+        id="search"
+        value={searchTerm}
+        onInputChange={handleSearch}
+      >
+        Search:
+      </InputWithLabel>
       <hr />
       <List list={searchedStories} />
 
