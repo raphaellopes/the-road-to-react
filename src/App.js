@@ -72,7 +72,7 @@ const App = () => {
 
   return (
     <div>
-      <p>Hello rasta</p>
+      <h1>The Road to React</h1>
 
       <InputWithLabel
         id="search"
