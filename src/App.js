@@ -32,16 +32,20 @@ const Search = ({ search, onSearch }) => (
   </>
 );
 
+const Item = ({ url, title, author, numComments, points }) => (
+  <div>
+    <span>
+      <a href={url}>{title}</a>
+    </span>
+    <span>{author}</span>
+    <span>{numComments}</span>
+    <span>{points}</span>
+  </div>
+)
+
 const List = ({ list }) =>
-  list.map(({ objectID, url, title, author, numComments, points }) => (
-    <div key={objectID}>
-      <span>
-        <a href={url}>{title}</a>
-      </span>
-      <span>{author}</span>
-      <span>{numComments}</span>
-      <span>{points}</span>
-    </div>
+  list.map(({ objectID, ...rest }) => (
+    <Item key={objectID} {...rest} />
   )
 );
 
