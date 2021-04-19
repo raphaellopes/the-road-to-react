@@ -1,5 +1,5 @@
 import {
-  useState, useEffect, useReducer, useCallback, useRef, memo
+  useState, useEffect, useReducer, useCallback, useRef, memo, useMemo
 } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -7,6 +7,14 @@ import styled from 'styled-components';
 import { ReactComponent as CheckIcon } from './check.svg';
 
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
+
+const getSumComments = stories => {
+  console.log('C');
+  return stories.data.reduce(
+    (result, value) => result + value.num_comments,
+    0
+  );
+}
 
 // reducer
 const storiesReducer = (state, action) => {
@@ -208,6 +216,7 @@ const App = () => {
     isError: false,
   });
   const [url, setUrl] = useState(`${API_ENDPOINT}${searchTerm}`);
+  const totalComments = useMemo(() => getSumComments(stories), [stories]);
 
   const handleFetchStories = useCallback(async () => {
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
@@ -246,7 +255,9 @@ const App = () => {
   console.log('B:App');
   return (
     <Container>
-      <HeadlinePrimary>The Road to React</HeadlinePrimary>
+      <HeadlinePrimary>
+        My Hacker Stories with {totalComments} comments
+      </HeadlinePrimary>
 
       <SearchForm
         searchTerm={searchTerm}
