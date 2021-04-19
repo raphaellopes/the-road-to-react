@@ -1,31 +1,6 @@
 import { useState, useEffect, useReducer } from 'react';
 
-const initialStories = [
-  {
-    title: 'React',
-    url: 'http://reactjs.org',
-    author: 'Jordan Walke',
-    numComments: 3,
-    points: 4,
-    objectID: 0
-  },
-  {
-    title: 'Redux',
-    url: 'http://redux.js.org',
-    author: 'Dan Abramov, Andrew Clark',
-    numComments: 2,
-    points: 5,
-    objectID: 1
-  },
-];
-
-const getAsyncStories = () => new Promise((resolve, reject) =>
-  setTimeout(
-    () => resolve({ data: { stories: initialStories } }),
-    // reject,
-    2000
-  )
-);
+const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
 // reducer
 const storiesReducer = (state, action) => {
@@ -52,7 +27,7 @@ const storiesReducer = (state, action) => {
     case 'REMOVE_STORY':
       return {
         ...state,
-        data: state.filter(
+        data: state.data.filter(
           story => story.objectID !== action.payload
         ),
       };
@@ -125,11 +100,12 @@ const App = () => {
 
   useEffect(() => {
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
-    getAsyncStories()
+    fetch(`${API_ENDPOINT}react`)
+      .then(response => response.json())
       .then(result => {
         dispatchStories({
           type: 'STORIES_FETCH_SUCCESS',
-          payload: result.data.stories
+          payload: result.hits
         });
       })
       .catch(() => {
