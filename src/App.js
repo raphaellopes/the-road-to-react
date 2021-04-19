@@ -2,6 +2,8 @@ import { useState, useEffect, useReducer, useCallback } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 
+import { ReactComponent as CheckIcon } from './check.svg';
+
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
 // reducer
@@ -94,6 +96,11 @@ const Button = styled.button`
   &:hover {
     background: #171212;
     color: #ffffff;
+
+    > svg > g {
+      fill: #ffffff;
+      stroke: #ffffff;
+    }
   }
 `;
 
@@ -152,7 +159,7 @@ const Item = ({
       <ButtonSmall
         type="button"
         onClick={() => onRemoveItem(objectID)}>
-        Dismiss
+        <CheckIcon width="18px" height="18px" />
       </ButtonSmall>
     </ItemColumn>
   </ItemStyled>
