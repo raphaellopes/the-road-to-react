@@ -1,4 +1,6 @@
-import { useState, useEffect, useReducer, useCallback, useRef } from 'react';
+import {
+  useState, useEffect, useReducer, useCallback, useRef, memo
+} from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 
@@ -170,9 +172,11 @@ const Item = ({
   </ItemStyled>
 )
 
-const List = ({ list, onRemoveItem }) =>
-  list.map((item) => (
-    <Item key={item.objectID} onRemoveItem={onRemoveItem} {...item} />
+const List = memo(
+  ({ list, onRemoveItem }) =>
+    console.log('B:List') || list.map((item) => (
+      <Item key={item.objectID} onRemoveItem={onRemoveItem} {...item} />
+    )
   )
 );
 
@@ -229,13 +233,17 @@ const App = () => {
     setUrl(`${API_ENDPOINT}${searchTerm}`);
   }
 
-  const handleRemoveStory = id => {
-    dispatchStories({
-      type: 'REMOVE_STORY',
-      payload: id
-    });
-  }
+  const handleRemoveStory = useCallback(
+    id => {
+      dispatchStories({
+        type: 'REMOVE_STORY',
+        payload: id
+      });
+    },
+    []
+  );
 
+  console.log('B:App');
   return (
     <Container>
       <HeadlinePrimary>The Road to React</HeadlinePrimary>
