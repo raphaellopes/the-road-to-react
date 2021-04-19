@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 
 const initialStories = [
   {
@@ -24,7 +24,16 @@ const getAsyncStories = () => new Promise(resolve =>
     () => resolve({ data: { stories: initialStories } }),
     2000
   )
-)
+);
+
+// reducer
+const storiesReducer = (state, action) => {
+  if (action.type === 'SET_STORIES') {
+    return action.payload;
+  } else {
+    throw new Error();
+  }
+}
 
 // hooks
 const useSemiPersistentState = (key, initialValue) => {
@@ -50,7 +59,9 @@ const InputWithLabel = ({ id, type = 'text', value, onInputChange, children }) =
   </>
 );
 
-const Item = ({ url, title, author, numComments, points }) => (
+const Item = ({
+  objectID, url, title, author, numComments, points, onRemoveItem
+}) => (
   <div>
     <span>
       <a href={url}>{title}</a>
@@ -58,12 +69,17 @@ const Item = ({ url, title, author, numComments, points }) => (
     <span>{author}</span>
     <span>{numComments}</span>
     <span>{points}</span>
+    <span>
+      <button type="button" onClick={() => onRemoveItem(objectID)}>
+        Dismiss
+      </button>
+    </span>
   </div>
 )
 
-const List = ({ list }) =>
-  list.map(({ objectID, ...rest }) => (
-    <Item key={objectID} {...rest} />
+const List = ({ list, onRemoveItem }) =>
+  list.map((item) => (
+    <Item key={item.objectID} onRemoveItem={onRemoveItem} {...item} />
   )
 );
 
@@ -71,7 +87,7 @@ const List = ({ list }) =>
 // root component
 const App = () => {
   const [searchTerm, setSearchTerm] = useSemiPersistentState('search', '');
-  const [stories, setStories] = useState([]);
+  const [stories, dispatchStories] = useReducer(storiesReducer, []);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
@@ -83,13 +99,26 @@ const App = () => {
     setIsLoading(true);
     getAsyncStories()
       .then(result => {
-        setStories(result.data.stories);
+        dispatchStories({
+          type: 'SET_STORIES',
+          payload: result.data.stories
+        });
         setIsLoading(false);
       })
       .catch(() => setIsError(true))
   }, []);
 
   const handleSearch = e => setSearchTerm(e.currentTarget.value);
+
+  const handleRemoveStory = id => {
+    const newStories = stories.filter(
+      story => story.objectID !== id
+    );
+    dispatchStories({
+      type: 'SET_STORIES',
+      payload: newStories
+    });
+  }
 
   return (
     <div>
@@ -105,7 +134,12 @@ const App = () => {
       <hr />
 
       {isError && (<p>Something went wrong ...</p>)}
-      {isLoading ? (<p>Loading ...</p>) : (<List list={searchedStories} />)}
+      {isLoading ? (<p>Loading ...</p>) : (
+        <List
+          list={searchedStories}
+          onRemoveItem={handleRemoveStory}
+        />
+      )}
 
     </div>
   );
