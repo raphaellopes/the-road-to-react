@@ -1,6 +1,6 @@
 import { useState, useEffect, useReducer, useCallback } from 'react';
 import axios from 'axios';
-import styles from './App.module.css';
+import styled from 'styled-components';
 
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
@@ -49,12 +49,87 @@ const useSemiPersistentState = (key, initialValue) => {
   return [value, setValue];
 }
 
+// styled-components
+const Container = styled.div`
+  height: 100vh;
+  padding: 20px;
+  background: #83a4d4; /* fallback */
+  background: linear-gradient(to left, #b6fbff, #83a4d4);
+  color: #171212;
+`;
+
+const HeadlinePrimary = styled.h1`
+  font-size: 48px;
+  font-weight: 300;
+  letter-spacing: 2px;
+`;
+
+const ItemColumn = styled.span`
+  ${({ width }) => `
+    width: ${width};
+    padding: 0 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    > a {
+      color: inherit;
+    }
+  `}
+`
+
+const ItemStyled = styled.div`
+  display: flex;
+  align-items: center;
+  padding-bottom: 5px;
+`;
+
+const Button = styled.button`
+  background: transparent;
+  border: 1px solid #171212;
+  padding: 5px;
+  cursor: pointer;
+  transition: all 0.1s ease-in;
+
+  &:hover {
+    background: #171212;
+    color: #ffffff;
+  }
+`;
+
+const ButtonSmall = styled(Button)`
+  padding: 5px;
+`;
+
+const ButtonLarge = styled(Button)`
+  padding: 10px;
+`;
+
+const Form = styled.form`
+  padding: 10px 0 20px 0;
+  display: flex;
+  align-items: baseline;
+`;
+
+const Label = styled.label`
+  border-top: 1px solid #171212;
+  border-left: 1px solid #171212;
+  padding-left: 5px;
+  font-size: 24px;
+`;
+
+const Input = styled.input`
+  border: none;
+  border-bottom: 1px solid #171212;
+  background-color: transparent;
+  font-size: 24px;
+`;
+
 // components
 const InputWithLabel = ({ id, type = 'text', value, onInputChange, children }) => (
   <>
-    <label className={styles.label} htmlFor={id}>{children}</label>&nbsp;
-    <input
-      className={styles.input}
+    <Label htmlFor={id}>{children}</Label>&nbsp;
+    <Input
       id={id}
       type={type}
       value={value}
@@ -66,22 +141,21 @@ const InputWithLabel = ({ id, type = 'text', value, onInputChange, children }) =
 const Item = ({
   objectID, url, title, author, numComments, points, onRemoveItem
 }) => (
-  <div className={styles.item}>
-    <span style={{ width: '40%' }}>
+  <ItemStyled>
+    <ItemColumn width="40%">
       <a href={url}>{title}</a>
-    </span>
-    <span style={{ width: '30%' }}>{author}</span>
-    <span style={{ width: '10%'}}>{numComments}</span>
-    <span style={{ width: '10%'}}>{points}</span>
-    <span style={{ width: '10%'}}>
-      <button
-        className={`${styles.button} ${styles.buttonSmall}`}
+    </ItemColumn>
+    <ItemColumn width="30%">{author}</ItemColumn>
+    <ItemColumn width="10%">{numComments}</ItemColumn>
+    <ItemColumn width="10%">{points}</ItemColumn>
+    <ItemColumn width="10%">
+      <ButtonSmall
         type="button"
         onClick={() => onRemoveItem(objectID)}>
         Dismiss
-      </button>
-    </span>
-  </div>
+      </ButtonSmall>
+    </ItemColumn>
+  </ItemStyled>
 )
 
 const List = ({ list, onRemoveItem }) =>
@@ -91,7 +165,7 @@ const List = ({ list, onRemoveItem }) =>
 );
 
 const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit }) => (
-  <form className={styles.searchForm} onSubmit={onSearchSubmit}>
+  <Form onSubmit={onSearchSubmit}>
     <InputWithLabel
       id="search"
       value={searchTerm}
@@ -100,16 +174,14 @@ const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit }) => (
       <strong>Search:</strong>
     </InputWithLabel>
 
-    <button
-      className={`${styles.button} ${styles.buttonLarge}`}
+    <ButtonLarge
       type="submit"
       disabled={!searchTerm}
     >
       Submit
-    </button>
-  </form>
+    </ButtonLarge>
+  </Form>
 );
-
 
 // root component
 const App = () => {
@@ -153,8 +225,8 @@ const App = () => {
   }
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.headlinePrimary}>The Road to React</h1>
+    <Container>
+      <HeadlinePrimary>The Road to React</HeadlinePrimary>
 
       <SearchForm
         searchTerm={searchTerm}
@@ -171,7 +243,7 @@ const App = () => {
         />
       )}
 
-    </div>
+    </Container>
   );
 }
 
