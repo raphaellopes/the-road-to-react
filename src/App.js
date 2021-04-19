@@ -1,5 +1,6 @@
 import { useState, useEffect, useReducer, useCallback } from 'react';
 import axios from 'axios';
+import './App.css';
 
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
@@ -51,8 +52,9 @@ const useSemiPersistentState = (key, initialValue) => {
 // components
 const InputWithLabel = ({ id, type = 'text', value, onInputChange, children }) => (
   <>
-    <label htmlFor={id}>{children}</label>&nbsp;
+    <label className="label" htmlFor={id}>{children}</label>&nbsp;
     <input
+      className="input"
       id={id}
       type={type}
       value={value}
@@ -64,15 +66,18 @@ const InputWithLabel = ({ id, type = 'text', value, onInputChange, children }) =
 const Item = ({
   objectID, url, title, author, numComments, points, onRemoveItem
 }) => (
-  <div>
-    <span>
+  <div className="item">
+    <span style={{ width: '40%' }}>
       <a href={url}>{title}</a>
     </span>
-    <span>{author}</span>
-    <span>{numComments}</span>
-    <span>{points}</span>
-    <span>
-      <button type="button" onClick={() => onRemoveItem(objectID)}>
+    <span style={{ width: '30%' }}>{author}</span>
+    <span style={{ width: '10%'}}>{numComments}</span>
+    <span style={{ width: '10%'}}>{points}</span>
+    <span style={{ width: '10%'}}>
+      <button
+        className="button button_small"
+        type="button"
+        onClick={() => onRemoveItem(objectID)}>
         Dismiss
       </button>
     </span>
@@ -86,7 +91,7 @@ const List = ({ list, onRemoveItem }) =>
 );
 
 const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit }) => (
-  <form onSubmit={onSearchSubmit}>
+  <form className="search-form" onSubmit={onSearchSubmit}>
     <InputWithLabel
       id="search"
       value={searchTerm}
@@ -96,6 +101,7 @@ const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit }) => (
     </InputWithLabel>
 
     <button
+      className="button button_large"
       type="submit"
       disabled={!searchTerm}
     >
@@ -147,15 +153,15 @@ const App = () => {
   }
 
   return (
-    <div>
-      <h1>The Road to React</h1>
+    <div className="container">
+      <h1 className="headline-primary">The Road to React</h1>
+
       <SearchForm
         searchTerm={searchTerm}
         onSearchInput={handleSearchInput}
         onSearchSubmit={handleSearchSubmit}
       />
 
-      <hr />
 
       {stories.isError && (<p>Something went wrong ...</p>)}
       {stories.isLoading ? (<p>Loading ...</p>) : (
