@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const stories = [
+const initialStories = [
   {
     title: 'React',
     url: 'http://reactjs.org',
@@ -18,6 +18,13 @@ const stories = [
     objectID: 1
   },
 ];
+
+const getAsyncStories = () => new Promise(resolve =>
+  setTimeout(
+    () => resolve({ data: { stories: initialStories } }),
+    2000
+  )
+)
 
 // hooks
 const useSemiPersistentState = (key, initialValue) => {
@@ -64,9 +71,16 @@ const List = ({ list }) =>
 // root component
 const App = () => {
   const [searchTerm, setSearchTerm] = useSemiPersistentState('search', '');
+  const [stories, setStories] = useState([]);
   const searchedStories = stories.filter(({ title }) =>
     title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  useEffect(() => {
+    getAsyncStories().then(result => {
+      setStories(result.data.stories);
+    })
+  }, []);
 
   const handleSearch = e => setSearchTerm(e.currentTarget.value);
 
