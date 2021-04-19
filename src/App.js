@@ -1,6 +1,6 @@
 import { useState, useEffect, useReducer, useCallback } from 'react';
 import axios from 'axios';
-import './App.css';
+import styles from './App.module.css';
 
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
@@ -52,9 +52,9 @@ const useSemiPersistentState = (key, initialValue) => {
 // components
 const InputWithLabel = ({ id, type = 'text', value, onInputChange, children }) => (
   <>
-    <label className="label" htmlFor={id}>{children}</label>&nbsp;
+    <label className={styles.label} htmlFor={id}>{children}</label>&nbsp;
     <input
-      className="input"
+      className={styles.input}
       id={id}
       type={type}
       value={value}
@@ -66,7 +66,7 @@ const InputWithLabel = ({ id, type = 'text', value, onInputChange, children }) =
 const Item = ({
   objectID, url, title, author, numComments, points, onRemoveItem
 }) => (
-  <div className="item">
+  <div className={styles.item}>
     <span style={{ width: '40%' }}>
       <a href={url}>{title}</a>
     </span>
@@ -75,7 +75,7 @@ const Item = ({
     <span style={{ width: '10%'}}>{points}</span>
     <span style={{ width: '10%'}}>
       <button
-        className="button button_small"
+        className={`${styles.button} ${styles.buttonSmall}`}
         type="button"
         onClick={() => onRemoveItem(objectID)}>
         Dismiss
@@ -91,7 +91,7 @@ const List = ({ list, onRemoveItem }) =>
 );
 
 const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit }) => (
-  <form className="search-form" onSubmit={onSearchSubmit}>
+  <form className={styles.searchForm} onSubmit={onSearchSubmit}>
     <InputWithLabel
       id="search"
       value={searchTerm}
@@ -101,7 +101,7 @@ const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit }) => (
     </InputWithLabel>
 
     <button
-      className="button button_large"
+      className={`${styles.button} ${styles.buttonLarge}`}
       type="submit"
       disabled={!searchTerm}
     >
@@ -153,8 +153,8 @@ const App = () => {
   }
 
   return (
-    <div className="container">
-      <h1 className="headline-primary">The Road to React</h1>
+    <div className={styles.container}>
+      <h1 className={styles.headlinePrimary}>The Road to React</h1>
 
       <SearchForm
         searchTerm={searchTerm}
