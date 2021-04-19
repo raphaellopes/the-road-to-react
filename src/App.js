@@ -1,5 +1,5 @@
 import {
-  useState, useEffect, useReducer, useCallback, useRef, memo, useMemo
+  useState, useEffect, useReducer, useCallback, useRef
 } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -9,7 +9,6 @@ import { ReactComponent as CheckIcon } from './check.svg';
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
 const getSumComments = stories => {
-  console.log('C');
   return stories.data.reduce(
     (result, value) => result + value.num_comments,
     0
@@ -180,11 +179,9 @@ const Item = ({
   </ItemStyled>
 )
 
-const List = memo(
-  ({ list, onRemoveItem }) =>
-    console.log('B:List') || list.map((item) => (
-      <Item key={item.objectID} onRemoveItem={onRemoveItem} {...item} />
-    )
+const List = ({ list, onRemoveItem }) =>
+  list.map((item) => (
+    <Item key={item.objectID} onRemoveItem={onRemoveItem} {...item} />
   )
 );
 
@@ -216,7 +213,7 @@ const App = () => {
     isError: false,
   });
   const [url, setUrl] = useState(`${API_ENDPOINT}${searchTerm}`);
-  const totalComments = useMemo(() => getSumComments(stories), [stories]);
+  const totalComments = getSumComments(stories);
 
   const handleFetchStories = useCallback(async () => {
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
@@ -242,17 +239,13 @@ const App = () => {
     setUrl(`${API_ENDPOINT}${searchTerm}`);
   }
 
-  const handleRemoveStory = useCallback(
-    id => {
-      dispatchStories({
-        type: 'REMOVE_STORY',
-        payload: id
-      });
-    },
-    []
-  );
+  const handleRemoveStory = id => {
+    dispatchStories({
+      type: 'REMOVE_STORY',
+      payload: id
+    });
+  };
 
-  console.log('B:App');
   return (
     <Container>
       <HeadlinePrimary>
