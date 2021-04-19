@@ -72,14 +72,21 @@ const List = ({ list }) =>
 const App = () => {
   const [searchTerm, setSearchTerm] = useSemiPersistentState('search', '');
   const [stories, setStories] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
   const searchedStories = stories.filter(({ title }) =>
     title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   useEffect(() => {
-    getAsyncStories().then(result => {
-      setStories(result.data.stories);
-    })
+    setIsLoading(true);
+    getAsyncStories()
+      .then(result => {
+        setStories(result.data.stories);
+        setIsLoading(false);
+      })
+      .catch(() => setIsError(true))
   }, []);
 
   const handleSearch = e => setSearchTerm(e.currentTarget.value);
@@ -96,7 +103,9 @@ const App = () => {
         <strong>Search:</strong>
       </InputWithLabel>
       <hr />
-      <List list={searchedStories} />
+
+      {isError && (<p>Something went wrong ...</p>)}
+      {isLoading ? (<p>Loading ...</p>) : (<List list={searchedStories} />)}
 
     </div>
   );
