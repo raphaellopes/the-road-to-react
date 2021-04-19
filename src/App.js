@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer, useCallback } from 'react';
+import { useState, useEffect, useReducer, useCallback, useRef } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 
@@ -42,10 +42,15 @@ const storiesReducer = (state, action) => {
 
 // hooks
 const useSemiPersistentState = (key, initialValue) => {
+  const isMounted = useRef(false);
   const [value, setValue] = useState(localStorage.getItem(key) || initialValue);
 
   useEffect(() => {
-    localStorage.setItem(key, value);
+    if (!isMounted.current) {
+      isMounted.current = true;
+    } else {
+      localStorage.setItem(key, value);
+    }
   }, [value, key]);
 
   return [value, setValue];
