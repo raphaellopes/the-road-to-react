@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer } from 'react';
+import { useState, useEffect, useReducer, useCallback } from 'react';
 
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
@@ -94,7 +94,7 @@ const App = () => {
     isError: false,
   });
 
-  useEffect(() => {
+  const handleFetchStories = useCallback(() => {
     if (!searchTerm) return;
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
     fetch(`${API_ENDPOINT}${searchTerm}`)
@@ -108,7 +108,11 @@ const App = () => {
       .catch(() => {
         dispatchStories({ type: 'STORIES_FETCH_FAILURE' });
       })
-  }, [searchTerm]);
+  }, [searchTerm])
+
+  useEffect(() => {
+    handleFetchStories();
+  }, [handleFetchStories]);
 
   const handleSearch = e => setSearchTerm(e.currentTarget.value);
 
