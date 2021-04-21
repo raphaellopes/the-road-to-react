@@ -3,8 +3,11 @@ import {
 } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
-import { ReactComponent as CheckIcon } from './check.svg';
+library.add(faCheck);
 
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
@@ -173,7 +176,7 @@ const Item = ({
       <ButtonSmall
         type="button"
         onClick={() => onRemoveItem(objectID)}>
-        <CheckIcon width="18px" height="18px" />
+        <FontAwesomeIcon icon="check" />
       </ButtonSmall>
     </ItemColumn>
   </ItemStyled>
