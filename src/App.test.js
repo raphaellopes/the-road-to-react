@@ -76,4 +76,54 @@ describe('Item', () => {
     fireEvent.click(screen.getByRole('button'));
     expect(handleRemoveItem).toHaveBeenCalledTimes(1);
   });
-})
+});
+
+describe('SearchForm', () => {
+  const searchFormProps = {
+    searchTerm: 'React',
+    onSearchInput: jest.fn(),
+    onSearchSubmit: jest.fn(),
+  };
+
+  test('renders the input field with its value', () => {
+    render(<SearchForm {...searchFormProps} />);
+    expect(screen.getByDisplayValue('React')).toBeInTheDocument();
+  });
+
+  test('renders the correct label', () => {
+    render(<SearchForm {...searchFormProps} />);
+    expect(screen.getByLabelText(/Search/)).toBeInTheDocument();
+  });
+
+  test('calls onSearchInput on input field change', () => {
+    render(<SearchForm {...searchFormProps} />);
+    fireEvent.change(screen.getByDisplayValue('React'), {
+      target: { value: 'Redux' }
+    });
+    expect(searchFormProps.onSearchInput).toHaveBeenCalledTimes(1);
+  });
+
+  test('calls onSearchSubmit on button submit click', () => {
+    render(<SearchForm {...searchFormProps} />);
+    fireEvent.submit(screen.getByRole('button'));
+    expect(searchFormProps.onSearchSubmit).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('List', () => {
+  const listProps = {
+    list: stories,
+    onRemoveItem: jest.fn(),
+  };
+
+  test('renders the list with its properties', () => {
+    render(<List {...listProps} />);
+    expect(screen.getAllByRole('button').length).toBe(2);
+  });
+
+  test('calls onRemoveItem for first item', () => {
+    render(<List {...listProps} />);
+    fireEvent.click(screen.getAllByRole('button')[0]);
+    expect(listProps.onRemoveItem).toHaveBeenCalledTimes(1);
+  });
+});
