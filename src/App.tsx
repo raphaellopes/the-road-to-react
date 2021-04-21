@@ -1,4 +1,5 @@
 import {
+  ChangeEvent, FormEvent, ReactNode,
   useState, useEffect, useReducer, useCallback, useRef
 } from 'react';
 import axios from 'axios';
@@ -11,15 +12,56 @@ library.add(faCheck);
 
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
-const getSumComments = stories => {
+// types
+type StoryType = {
+  objectID: string;
+  url: string;
+  title: string;
+  author: string;
+  num_comments: number;
+  points: number;
+}
+
+type StoriesType = StoryType[];
+
+// @TODO: add correct type
+const getSumComments = (stories:any) => {
   return stories.data.reduce(
-    (result, value) => result + value.num_comments,
+    (result:number, value:any) => result + value.num_comments,
     0
   );
 }
 
 // reducer
-const storiesReducer = (state, action) => {
+type StoriesStateType = {
+  data: StoriesType;
+  isLoading: boolean;
+  isError: boolean;
+}
+interface StoriesFetchInitActionType {
+  type: 'STORIES_FETCH_INIT';
+}
+interface StoriesFetchSuccessActionType {
+  type: 'STORIES_FETCH_SUCCESS';
+  payload: StoriesType;
+}
+interface StoriesFetchFailureActionType {
+  type: 'STORIES_FETCH_FAILURE';
+}
+interface StoriesRemoveActionType {
+  type: 'REMOVE_STORY';
+  payload: StoryType;
+}
+type StoriesActionType =
+  | StoriesFetchInitActionType
+  | StoriesFetchSuccessActionType
+  | StoriesFetchFailureActionType
+  | StoriesRemoveActionType;
+
+const storiesReducer = (
+  state: StoriesStateType,
+  action: StoriesActionType
+) => {
   switch(action.type) {
     case 'STORIES_FETCH_INIT':
       return {
@@ -44,7 +86,7 @@ const storiesReducer = (state, action) => {
       return {
         ...state,
         data: state.data.filter(
-          story => story.objectID !== action.payload
+          story => story.objectID !== action.payload.objectID
         ),
       };
     default:
@@ -53,7 +95,10 @@ const storiesReducer = (state, action) => {
 }
 
 // hooks
-const useSemiPersistentState = (key, initialValue) => {
+const useSemiPersistentState = (
+  key:string,
+  initialValue:string
+):[string, (newValue:string) => void] => {
   const isMounted = useRef(false);
   const [value, setValue] = useState(localStorage.getItem(key) || initialValue);
 
@@ -84,7 +129,7 @@ const HeadlinePrimary = styled.h1`
 `;
 
 const ItemColumn = styled.span`
-  ${({ width }) => `
+  ${({ width }: { width: string }) => `
     width: ${width};
     padding: 0 5px;
     white-space: nowrap;
@@ -150,45 +195,96 @@ const Input = styled.input`
 `;
 
 // components
-const InputWithLabel = ({ id, type = 'text', value, onInputChange, children }) => (
+type InputWithLabelProps = {
+  id: string;
+  type?: string;
+  value: string;
+  onInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  isFocused?: boolean;
+  children: ReactNode;
+}
+const InputWithLabel = ({
+  id,
+  type = 'text',
+  value,
+  onInputChange,
+  isFocused,
+  children
+}: InputWithLabelProps) => {
+  const inputRef = useRef<HTMLInputElement>(null!);
+
+  useEffect(() => {
+    if (isFocused && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isFocused])
+
+  return (
+    <>
+      <Label htmlFor={id}>{children}</Label>&nbsp;
+      <Input
+        ref={inputRef}
+        id={id}
+        type={type}
+        value={value}
+        onChange={onInputChange}
+      />
+    </>
+  );
+}
+
+type ItemProps = {
+  item: StoryType,
+  onRemoveItem: (item:StoryType) => void;
+};
+const Item = ({
+  item,
+  onRemoveItem
+}: ItemProps) => {
+  const { url, title, author, num_comments, points } = item;
+  return (
+    <ItemStyled>
+      <ItemColumn width="40%">
+        <a href={url}>{title}</a>
+      </ItemColumn>
+      <ItemColumn width="30%">{author}</ItemColumn>
+      <ItemColumn width="10%">{num_comments}</ItemColumn>
+      <ItemColumn width="10%">{points}</ItemColumn>
+      <ItemColumn width="10%">
+        <ButtonSmall
+          type="button"
+          onClick={() => onRemoveItem(item)}>
+          <FontAwesomeIcon icon="check" />
+        </ButtonSmall>
+      </ItemColumn>
+    </ItemStyled>
+  );
+}
+
+type ListProps = {
+  list: StoriesType;
+  onRemoveItem: (item:StoryType) => void;
+}
+const List = ({ list, onRemoveItem }:ListProps) => (
   <>
-    <Label htmlFor={id}>{children}</Label>&nbsp;
-    <Input
-      id={id}
-      type={type}
-      value={value}
-      onChange={onInputChange}
-    />
+    {list.map(
+      (item) => (
+        <Item key={item.objectID} onRemoveItem={onRemoveItem} item={item} />
+      )
+    )}
   </>
 );
 
-const Item = ({
-  objectID, url, title, author, numComments, points, onRemoveItem
-}) => (
-  <ItemStyled>
-    <ItemColumn width="40%">
-      <a href={url}>{title}</a>
-    </ItemColumn>
-    <ItemColumn width="30%">{author}</ItemColumn>
-    <ItemColumn width="10%">{numComments}</ItemColumn>
-    <ItemColumn width="10%">{points}</ItemColumn>
-    <ItemColumn width="10%">
-      <ButtonSmall
-        type="button"
-        onClick={() => onRemoveItem(objectID)}>
-        <FontAwesomeIcon icon="check" />
-      </ButtonSmall>
-    </ItemColumn>
-  </ItemStyled>
-)
-
-const List = ({ list, onRemoveItem }) =>
-  list.map((item) => (
-    <Item key={item.objectID} onRemoveItem={onRemoveItem} {...item} />
-  )
-);
-
-const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit }) => (
+type SearchFormProps = {
+  searchTerm: string;
+  onSearchInput: (event: ChangeEvent<HTMLInputElement>) => void;
+  onSearchSubmit: (event: FormEvent<HTMLFormElement>) => void;
+}
+const SearchForm = ({
+  searchTerm,
+  onSearchInput,
+  onSearchSubmit
+}: SearchFormProps) => (
   <Form onSubmit={onSearchSubmit}>
     <InputWithLabel
       id="search"
@@ -235,17 +331,19 @@ const App = () => {
     handleFetchStories();
   }, [handleFetchStories]);
 
-  const handleSearchInput = e => setSearchTerm(e.currentTarget.value);
+  const handleSearchInput = (e:ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.currentTarget.value);
+  }
 
-  const handleSearchSubmit = (e) => {
+  const handleSearchSubmit = (e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setUrl(`${API_ENDPOINT}${searchTerm}`);
   }
 
-  const handleRemoveStory = id => {
+  const handleRemoveStory = (item:StoryType) => {
     dispatchStories({
       type: 'REMOVE_STORY',
-      payload: id
+      payload: item
     });
   };
 
