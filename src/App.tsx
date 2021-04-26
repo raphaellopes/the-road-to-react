@@ -289,6 +289,7 @@ const SearchForm = ({
     <InputWithLabel
       id="search"
       value={searchTerm}
+  isFocused
       onInputChange={onSearchInput}
     >
       <strong>Search:</strong>
