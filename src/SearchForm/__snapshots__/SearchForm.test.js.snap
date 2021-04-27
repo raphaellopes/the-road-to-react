@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchForm renders snapshot 1`] = `
+.c3 {
+  background: transparent;
+  border: 1px solid #171212;
+  padding: 5px;
+  cursor: pointer;
+  -webkit-transition: all 0.1s ease-in;
+  transition: all 0.1s ease-in;
+}
+
+.c3:hover {
+  background: #171212;
+  color: #ffffff;
+}
+
+.c3:hover > svg > g {
+  fill: #ffffff;
+  stroke: #ffffff;
+}
+
+.c4 {
+  padding: 10px;
+}
+
+.c1 {
+  border-top: 1px solid #171212;
+  border-left: 1px solid #171212;
+  padding-left: 5px;
+  font-size: 24px;
+}
+
+.c2 {
+  border: none;
+  border-bottom: 1px solid #171212;
+  background-color: transparent;
+  font-size: 24px;
+}
+
+.c0 {
+  padding: 10px 0 20px 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: baseline;
+  -webkit-box-align: baseline;
+  -ms-flex-align: baseline;
+  align-items: baseline;
+}
+
+<form
+  class="c0"
+>
+  <label
+    class="c1"
+    for="search"
+  >
+    <strong>
+      Search:
+    </strong>
+  </label>
+   
+  <input
+    class="c2"
+    id="search"
+    type="text"
+    value="React"
+  />
+  <button
+    class="c3 c4"
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
+`;

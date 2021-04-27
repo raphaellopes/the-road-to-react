@@ -1,14 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { StoriesType, StoryType } from './types';
-import { ButtonSmall } from './styles';
-
-type ListProps = {
-  list: StoriesType;
-  onRemoveItem: (item:StoryType) => void;
-}
+import { ButtonSmall } from '../styles';
+import { ListProps, ItemProps } from './types';
+import { ItemContainer, ItemColumn } from './styles';
 
 const List = ({ list, onRemoveItem }:ListProps) => (
   <>
@@ -20,36 +15,13 @@ const List = ({ list, onRemoveItem }:ListProps) => (
   </>
 );
 
-const ItemColumn = styled.span`
-  ${({ width }: { width: string }) => `
-    width: ${width};
-    padding: 0 5px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    > a {
-      color: inherit;
-    }
-  `}
-`
-
-const ItemStyled = styled.div`
-  display: flex;
-  align-items: center;
-  padding-bottom: 5px;
-`;
-type ItemProps = {
-  item: StoryType,
-  onRemoveItem: (item:StoryType) => void;
-};
 export const Item = ({
   item,
   onRemoveItem
 }: ItemProps) => {
   const { url, title, author, num_comments, points } = item;
   return (
-    <ItemStyled>
+    <ItemContainer>
       <ItemColumn width="40%">
         <a href={url}>{title}</a>
       </ItemColumn>
@@ -63,7 +35,7 @@ export const Item = ({
           <FontAwesomeIcon icon="check" data-testid="dismiss" />
         </ButtonSmall>
       </ItemColumn>
-    </ItemStyled>
+    </ItemContainer>
   );
 }
 
