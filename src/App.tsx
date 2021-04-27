@@ -254,7 +254,7 @@ const Item = ({
         <ButtonSmall
           type="button"
           onClick={() => onRemoveItem(item)}>
-          <FontAwesomeIcon icon="check" />
+          <FontAwesomeIcon icon="check" data-testid="dismiss" />
         </ButtonSmall>
       </ItemColumn>
     </ItemStyled>
@@ -289,7 +289,7 @@ const SearchForm = ({
     <InputWithLabel
       id="search"
       value={searchTerm}
-  isFocused
+      isFocused
       onInputChange={onSearchInput}
     >
       <strong>Search:</strong>

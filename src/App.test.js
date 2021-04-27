@@ -1,5 +1,8 @@
 import { render, screen, fireEvent, act } from '@testing-library/react';
+import axios from 'axios';
 import App, { storiesReducer, SearchForm, Item, List, InputWithLabel } from './App';
+
+jest.mock('axios');
 
 const storyOne = {
   title: 'React',
@@ -127,3 +130,62 @@ describe('List', () => {
     expect(listProps.onRemoveItem).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('App', () => {
+  test('succeeds fetching data', async () => {
+    const promise = Promise.resolve({
+      data: {
+        hits: stories
+      }
+    });
+
+    axios.get.mockImplementationOnce(() => promise);
+    render(<App />);
+
+    expect(screen.queryByText(/Loading/)).toBeInTheDocument();
+
+    await act(() => promise);
+
+    expect(screen.queryByText(/Loading/)).toBeNull();
+    expect(screen.queryByText(/React/)).toBeInTheDocument();
+    expect(screen.queryByText(/Redux/)).toBeInTheDocument();
+    expect(screen.queryAllByTestId('dismiss').length).toBe(2);
+  });
+
+  // @TODO: Check why  is not working with try catch
+  // test('fails fetching data', async () => {
+    // const promise = Promise.reject();
+    // axios.get.mockImplementationOnce(() => promise);
+    // render(<App />);
+
+    // expect(screen.queryByText(/Loading/)).toBeInTheDocument();
+
+    // try {
+      // await act(() => promise);
+    // } catch (e) {
+      // expect(screen.queryByText(/Loading/)).toBeNull();
+      // expect(screen.queryByText(/went wrong/)).toBeInTheDocument();
+    // }
+
+  // });
+
+  test('removes a story', async () => {
+    const promise = Promise.resolve({
+      data: {
+        hits: stories
+      }
+    });
+
+    axios.get.mockImplementationOnce(() => promise);
+    render(<App />);
+
+    await act(() => promise);
+
+    expect(screen.queryAllByTestId('dismiss').length).toBe(2);
+    expect(screen.queryByText(/Jordan Walke/)).toBeInTheDocument();
+
+    fireEvent.click(screen.queryAllByTestId('dismiss')[0]);
+    expect(screen.queryAllByTestId('dismiss').length).toBe(1);
+    expect(screen.queryByText(/Jordan Walke/)).toBeNull();
+  });
+})
