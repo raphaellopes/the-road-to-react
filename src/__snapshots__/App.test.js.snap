@@ -1,6 +1,29 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Item renders snapshot 1`] = `
+.c4 {
+  background: transparent;
+  border: 1px solid #171212;
+  padding: 5px;
+  cursor: pointer;
+  -webkit-transition: all 0.1s ease-in;
+  transition: all 0.1s ease-in;
+}
+
+.c4:hover {
+  background: #171212;
+  color: #ffffff;
+}
+
+.c4:hover > svg > g {
+  fill: #ffffff;
+  stroke: #ffffff;
+}
+
+.c5 {
+  padding: 5px;
+}
+
 .c1 {
   width: 40%;
   padding: 0 5px;
@@ -47,29 +70,6 @@ exports[`Item renders snapshot 1`] = `
   -ms-flex-align: center;
   align-items: center;
   padding-bottom: 5px;
-}
-
-.c4 {
-  background: transparent;
-  border: 1px solid #171212;
-  padding: 5px;
-  cursor: pointer;
-  -webkit-transition: all 0.1s ease-in;
-  transition: all 0.1s ease-in;
-}
-
-.c4:hover {
-  background: #171212;
-  color: #ffffff;
-}
-
-.c4:hover > svg > g {
-  fill: #ffffff;
-  stroke: #ffffff;
-}
-
-.c5 {
-  padding: 5px;
 }
 
 <div
@@ -133,6 +133,29 @@ exports[`Item renders snapshot 1`] = `
 `;
 
 exports[`List renders snapshot 1`] = `
+.c4 {
+  background: transparent;
+  border: 1px solid #171212;
+  padding: 5px;
+  cursor: pointer;
+  -webkit-transition: all 0.1s ease-in;
+  transition: all 0.1s ease-in;
+}
+
+.c4:hover {
+  background: #171212;
+  color: #ffffff;
+}
+
+.c4:hover > svg > g {
+  fill: #ffffff;
+  stroke: #ffffff;
+}
+
+.c5 {
+  padding: 5px;
+}
+
 .c1 {
   width: 40%;
   padding: 0 5px;
@@ -179,29 +202,6 @@ exports[`List renders snapshot 1`] = `
   -ms-flex-align: center;
   align-items: center;
   padding-bottom: 5px;
-}
-
-.c4 {
-  background: transparent;
-  border: 1px solid #171212;
-  padding: 5px;
-  cursor: pointer;
-  -webkit-transition: all 0.1s ease-in;
-  transition: all 0.1s ease-in;
-}
-
-.c4:hover {
-  background: #171212;
-  color: #ffffff;
-}
-
-.c4:hover > svg > g {
-  fill: #ffffff;
-  stroke: #ffffff;
-}
-
-.c5 {
-  padding: 5px;
 }
 
 <div
@@ -288,18 +288,6 @@ exports[`SearchForm renders snapshot 1`] = `
   padding: 10px;
 }
 
-.c0 {
-  padding: 10px 0 20px 0;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-align-items: baseline;
-  -webkit-box-align: baseline;
-  -ms-flex-align: baseline;
-  align-items: baseline;
-}
-
 .c1 {
   border-top: 1px solid #171212;
   border-left: 1px solid #171212;
@@ -312,6 +300,18 @@ exports[`SearchForm renders snapshot 1`] = `
   border-bottom: 1px solid #171212;
   background-color: transparent;
   font-size: 24px;
+}
+
+.c0 {
+  padding: 10px 0 20px 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: baseline;
+  -webkit-box-align: baseline;
+  -ms-flex-align: baseline;
+  align-items: baseline;
 }
 
 <form
