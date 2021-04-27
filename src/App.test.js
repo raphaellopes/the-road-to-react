@@ -79,6 +79,11 @@ describe('Item', () => {
     fireEvent.click(screen.getByRole('button'));
     expect(handleRemoveItem).toHaveBeenCalledTimes(1);
   });
+
+  test('renders snapshot', () => {
+    const { container } = render(<Item item={storyOne} />)
+    expect(container.firstChild).toMatchSnapshot();
+  });
 });
 
 describe('SearchForm', () => {
@@ -111,6 +116,11 @@ describe('SearchForm', () => {
     fireEvent.submit(screen.getByRole('button'));
     expect(searchFormProps.onSearchSubmit).toHaveBeenCalledTimes(1);
   });
+
+  test('renders snapshot', () => {
+    const { container } = render(<SearchForm {...searchFormProps} />)
+    expect(container.firstChild).toMatchSnapshot();
+  });
 });
 
 describe('List', () => {
@@ -118,6 +128,11 @@ describe('List', () => {
     list: stories,
     onRemoveItem: jest.fn(),
   };
+
+  test('renders snapshot', () => {
+    const { container } = render(<List {...listProps} />)
+    expect(container.firstChild).toMatchSnapshot();
+  });
 
   test('renders the list with its properties', () => {
     render(<List {...listProps} />);
