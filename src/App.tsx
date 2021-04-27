@@ -306,7 +306,7 @@ const SearchForm = ({
 
 // root component
 const App = () => {
-  const [searchTerm, setSearchTerm] = useSemiPersistentState('search', '');
+  const [searchTerm, setSearchTerm] = useSemiPersistentState('search', 'React');
   const [stories, dispatchStories] = useReducer(storiesReducer, {
     data: [],
     isLoading: false,
