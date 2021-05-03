@@ -15,3 +15,8 @@ export type SortTypes = 'TITLE' | 'AUTHOR' | 'COMMENT' | 'POINT' | 'NONE';
 export type SortDictType = {
   [key:string]: (data:StoriesType) => StoriesType
 };
+
+export type SortStateType = {
+  sortKey: SortTypes,
+  isReverse: boolean
+};

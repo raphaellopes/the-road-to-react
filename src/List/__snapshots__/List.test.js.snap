@@ -24,6 +24,10 @@ exports[`Item renders snapshot 1`] = `
   padding: 5px;
 }
 
+.c6 > svg {
+  margin-left: 10px;
+}
+
 .c1 {
   width: 40%;
   padding: 0 5px;
@@ -108,7 +112,7 @@ exports[`Item renders snapshot 1`] = `
     width="10%"
   >
     <button
-      class="c4 c5"
+      class="c4 c5 c6"
       type="button"
     >
       <svg
@@ -167,6 +171,10 @@ exports[`List renders snapshot 1`] = `
   font-weight: 600;
 }
 
+.c4 > svg {
+  margin-left: 10px;
+}
+
 .c1 {
   width: 40%;
   padding: 0 5px;
@@ -179,20 +187,8 @@ exports[`List renders snapshot 1`] = `
   color: inherit;
 }
 
-.c4 {
-  width: 30%;
-  padding: 0 5px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.c4 > a {
-  color: inherit;
-}
-
 .c5 {
-  width: 10%;
+  width: 30%;
   padding: 0 5px;
   white-space: nowrap;
   overflow: hidden;
@@ -204,6 +200,18 @@ exports[`List renders snapshot 1`] = `
 }
 
 .c6 {
+  width: 10%;
+  padding: 0 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.c6 > a {
+  color: inherit;
+}
+
+.c7 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -224,54 +232,114 @@ exports[`List renders snapshot 1`] = `
       width="40%"
     >
       <button
-        class="c2 c3"
+        class="c2 c3 c4"
         type="button"
       >
         Title
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-arrow-down fa-w-14 "
+          data-icon="arrow-down"
+          data-prefix="fas"
+          focusable="false"
+          role="img"
+          viewBox="0 0 448 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M413.1 222.5l22.2 22.2c9.4 9.4 9.4 24.6 0 33.9L241 473c-9.4 9.4-24.6 9.4-33.9 0L12.7 278.6c-9.4-9.4-9.4-24.6 0-33.9l22.2-22.2c9.5-9.5 25-9.3 34.3.4L184 343.4V56c0-13.3 10.7-24 24-24h32c13.3 0 24 10.7 24 24v287.4l114.8-120.5c9.3-9.8 24.8-10 34.3-.4z"
+            fill="currentColor"
+          />
+        </svg>
       </button>
     </span>
     <span
-      class="c4"
+      class="c5"
       width="30%"
     >
       <button
-        class="c2 c3"
+        class="c2 c3 c4"
         type="button"
       >
         Author
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-arrow-down fa-w-14 "
+          data-icon="arrow-down"
+          data-prefix="fas"
+          focusable="false"
+          role="img"
+          viewBox="0 0 448 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M413.1 222.5l22.2 22.2c9.4 9.4 9.4 24.6 0 33.9L241 473c-9.4 9.4-24.6 9.4-33.9 0L12.7 278.6c-9.4-9.4-9.4-24.6 0-33.9l22.2-22.2c9.5-9.5 25-9.3 34.3.4L184 343.4V56c0-13.3 10.7-24 24-24h32c13.3 0 24 10.7 24 24v287.4l114.8-120.5c9.3-9.8 24.8-10 34.3-.4z"
+            fill="currentColor"
+          />
+        </svg>
       </button>
     </span>
     <span
-      class="c5"
+      class="c6"
       width="10%"
     >
       <button
-        class="c2 c3"
+        class="c2 c3 c4"
         type="button"
       >
         Comments
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-arrow-down fa-w-14 "
+          data-icon="arrow-down"
+          data-prefix="fas"
+          focusable="false"
+          role="img"
+          viewBox="0 0 448 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M413.1 222.5l22.2 22.2c9.4 9.4 9.4 24.6 0 33.9L241 473c-9.4 9.4-24.6 9.4-33.9 0L12.7 278.6c-9.4-9.4-9.4-24.6 0-33.9l22.2-22.2c9.5-9.5 25-9.3 34.3.4L184 343.4V56c0-13.3 10.7-24 24-24h32c13.3 0 24 10.7 24 24v287.4l114.8-120.5c9.3-9.8 24.8-10 34.3-.4z"
+            fill="currentColor"
+          />
+        </svg>
       </button>
     </span>
     <span
-      class="c5"
+      class="c6"
       width="10%"
     >
       <button
-        class="c2 c3"
+        class="c2 c3 c4"
         type="button"
       >
         Points
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-arrow-down fa-w-14 "
+          data-icon="arrow-down"
+          data-prefix="fas"
+          focusable="false"
+          role="img"
+          viewBox="0 0 448 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M413.1 222.5l22.2 22.2c9.4 9.4 9.4 24.6 0 33.9L241 473c-9.4 9.4-24.6 9.4-33.9 0L12.7 278.6c-9.4-9.4-9.4-24.6 0-33.9l22.2-22.2c9.5-9.5 25-9.3 34.3.4L184 343.4V56c0-13.3 10.7-24 24-24h32c13.3 0 24 10.7 24 24v287.4l114.8-120.5c9.3-9.8 24.8-10 34.3-.4z"
+            fill="currentColor"
+          />
+        </svg>
       </button>
     </span>
     <span
-      class="c5"
+      class="c6"
       width="10%"
     >
       Actions
     </span>
   </div>
   <div
-    class="c6"
+    class="c7"
   >
     <span
       class="c1"
@@ -284,29 +352,29 @@ exports[`List renders snapshot 1`] = `
       </a>
     </span>
     <span
-      class="c4"
+      class="c5"
       width="30%"
     >
       Jordan Walke
     </span>
     <span
-      class="c5"
+      class="c6"
       width="10%"
     >
       3
     </span>
     <span
-      class="c5"
+      class="c6"
       width="10%"
     >
       4
     </span>
     <span
-      class="c5"
+      class="c6"
       width="10%"
     >
       <button
-        class="c2 c3"
+        class="c2 c3 c4"
         type="button"
       >
         <svg
@@ -329,7 +397,7 @@ exports[`List renders snapshot 1`] = `
     </span>
   </div>
   <div
-    class="c6"
+    class="c7"
   >
     <span
       class="c1"
@@ -342,29 +410,29 @@ exports[`List renders snapshot 1`] = `
       </a>
     </span>
     <span
-      class="c4"
+      class="c5"
       width="30%"
     >
       Dan Abramov, Andrew Clark
     </span>
     <span
-      class="c5"
+      class="c6"
       width="10%"
     >
       2
     </span>
     <span
-      class="c5"
+      class="c6"
       width="10%"
     >
       5
     </span>
     <span
-      class="c5"
+      class="c6"
       width="10%"
     >
       <button
-        class="c2 c3"
+        class="c2 c3 c4"
         type="button"
       >
         <svg

@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import { sortBy } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { ButtonSmall } from '../styles';
 import { StoriesType } from '../types';
-import { ListProps, ItemProps, SortTypes, SortDictType } from './types';
-import { Header, ItemContainer, ItemColumn } from './styles';
+import { ListProps, ItemProps, SortTypes, SortDictType, SortStateType } from './types';
+import { Header, HeaderButton, ItemContainer, ItemColumn } from './styles';
 
 const List = ({ list, onRemoveItem }:ListProps) => {
-  const [sort, setSort] = useState<SortTypes>('NONE');
+  const [sort, setSort] = useState<SortStateType>({
+    sortKey: 'NONE',
+    isReverse: false
+  });
 
   const SORTS:SortDictType = {
     NONE: (data:StoriesType) => data,
@@ -18,51 +20,66 @@ const List = ({ list, onRemoveItem }:ListProps) => {
     POINT: (data:StoriesType) => sortBy(data, 'points').reverse(),
   };
 
-  const sortFunction = SORTS[sort];
-  const sortedList = sortFunction(list);
-  const isActive:(value:SortTypes) => boolean = (value) => value === sort;
+  const sortFunction = SORTS[sort.sortKey];
+  const sortedList = sort.isReverse ? sortFunction(list).reverse() : sortFunction(list);
+  const isActive:(value:SortTypes) => boolean = (value) => value === sort.sortKey;
 
   const handleSort = (sortKey:SortTypes) => {
-    setSort(sortKey);
+    const isReverse = sort.sortKey === sortKey && !sort.isReverse;
+    setSort({
+      sortKey,
+      isReverse
+    });
+  }
+
+  const renderSortIcon = (sortKey:SortTypes) => {
+    const icon = isActive(sortKey) && !sort.isReverse ? 'arrow-up' : 'arrow-down';
+    return (
+      <FontAwesomeIcon icon={icon} />
+    );
   }
 
   const renderHeader = (
     <Header>
       <ItemColumn width="40%">
-        <ButtonSmall
+        <HeaderButton
           type="button"
           onClick={() => handleSort('TITLE')}
           active={isActive('TITLE')}
         >
           Title
-        </ButtonSmall>
+          {renderSortIcon('TITLE')}
+        </HeaderButton>
       </ItemColumn>
       <ItemColumn width="30%">
-        <ButtonSmall
+        <HeaderButton
           type="button"
           onClick={() => handleSort('AUTHOR')}
           active={isActive('AUTHOR')}
         >
           Author
-        </ButtonSmall>
+          {renderSortIcon('AUTHOR')}
+        </HeaderButton>
       </ItemColumn>
       <ItemColumn width="10%">
-        <ButtonSmall
+        <HeaderButton
           type="button"
           onClick={() => handleSort('COMMENT')}
           active={isActive('COMMENT')}
         >
           Comments
-        </ButtonSmall>
+          {renderSortIcon('COMMENT')}
+        </HeaderButton>
       </ItemColumn>
       <ItemColumn width="10%">
-        <ButtonSmall
+        <HeaderButton
           type="button"
           onClick={() => handleSort('POINT')}
           active={isActive('POINT')}
         >
           Points
-        </ButtonSmall>
+          {renderSortIcon('POINT')}
+        </HeaderButton>
       </ItemColumn>
       <ItemColumn width="10%">Actions</ItemColumn>
     </Header>
@@ -94,11 +111,11 @@ export const Item = ({
       <ItemColumn width="10%">{num_comments}</ItemColumn>
       <ItemColumn width="10%">{points}</ItemColumn>
       <ItemColumn width="10%">
-        <ButtonSmall
+        <HeaderButton
           type="button"
           onClick={() => onRemoveItem(item)}>
           <FontAwesomeIcon icon="check" data-testid="dismiss" />
-        </ButtonSmall>
+        </HeaderButton>
       </ItemColumn>
     </ItemContainer>
   );

@@ -1,10 +1,17 @@
 import styled from 'styled-components';
+import { ButtonSmall } from '../styles';
 
 export const Header = styled.div`
   display: flex;
 
   > span {
     font-weight: 600;
+  }
+`;
+
+export const HeaderButton = styled(ButtonSmall)`
+  > svg {
+    margin-left: 10px;
   }
 `;
 

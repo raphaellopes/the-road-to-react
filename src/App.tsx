@@ -5,13 +5,13 @@ import {
 import axios from 'axios';
 import styled from 'styled-components';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 
 import { StoriesType, StoryType } from './types';
 import SearchForm from './SearchForm';
 import List from './List';
 
-library.add(faCheck);
+library.add(faCheck, faArrowUp, faArrowDown);
 
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 

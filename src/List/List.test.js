@@ -1,11 +1,11 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { stories, storyOne } from '../mockedTests';
 
 import List, { Item } from './index';
 
-library.add(faCheck);
+library.add(faCheck, faArrowUp, faArrowDown);
 
 describe('List', () => {
   const listProps = {
