@@ -133,7 +133,7 @@ exports[`Item renders snapshot 1`] = `
 `;
 
 exports[`List renders snapshot 1`] = `
-.c4 {
+.c2 {
   background: transparent;
   border: 1px solid #171212;
   padding: 5px;
@@ -142,18 +142,29 @@ exports[`List renders snapshot 1`] = `
   transition: all 0.1s ease-in;
 }
 
-.c4:hover {
+.c2:hover {
   background: #171212;
   color: #ffffff;
 }
 
-.c4:hover > svg > g {
+.c2:hover > svg > g {
   fill: #ffffff;
   stroke: #ffffff;
 }
 
-.c5 {
+.c3 {
   padding: 5px;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > span {
+  font-weight: 600;
 }
 
 .c1 {
@@ -168,7 +179,7 @@ exports[`List renders snapshot 1`] = `
   color: inherit;
 }
 
-.c2 {
+.c4 {
   width: 30%;
   padding: 0 5px;
   white-space: nowrap;
@@ -176,11 +187,11 @@ exports[`List renders snapshot 1`] = `
   text-overflow: ellipsis;
 }
 
-.c2 > a {
+.c4 > a {
   color: inherit;
 }
 
-.c3 {
+.c5 {
   width: 10%;
   padding: 0 5px;
   white-space: nowrap;
@@ -188,11 +199,11 @@ exports[`List renders snapshot 1`] = `
   text-overflow: ellipsis;
 }
 
-.c3 > a {
+.c5 > a {
   color: inherit;
 }
 
-.c0 {
+.c6 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -204,62 +215,176 @@ exports[`List renders snapshot 1`] = `
   padding-bottom: 5px;
 }
 
-<div
-  class="c0"
->
-  <span
-    class="c1"
-    width="40%"
+<div>
+  <div
+    class="c0"
   >
-    <a
-      href="https://reactjs.org/"
+    <span
+      class="c1"
+      width="40%"
     >
-      React
-    </a>
-  </span>
-  <span
-    class="c2"
-    width="30%"
-  >
-    Jordan Walke
-  </span>
-  <span
-    class="c3"
-    width="10%"
-  >
-    3
-  </span>
-  <span
-    class="c3"
-    width="10%"
-  >
-    4
-  </span>
-  <span
-    class="c3"
-    width="10%"
-  >
-    <button
-      class="c4 c5"
-      type="button"
-    >
-      <svg
-        aria-hidden="true"
-        class="svg-inline--fa fa-check fa-w-16 "
-        data-icon="check"
-        data-prefix="fas"
-        data-testid="dismiss"
-        focusable="false"
-        role="img"
-        viewBox="0 0 512 512"
-        xmlns="http://www.w3.org/2000/svg"
+      <button
+        class="c2 c3"
+        type="button"
       >
-        <path
-          d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"
-          fill="currentColor"
-        />
-      </svg>
-    </button>
-  </span>
+        Title
+      </button>
+    </span>
+    <span
+      class="c4"
+      width="30%"
+    >
+      <button
+        class="c2 c3"
+        type="button"
+      >
+        Author
+      </button>
+    </span>
+    <span
+      class="c5"
+      width="10%"
+    >
+      <button
+        class="c2 c3"
+        type="button"
+      >
+        Comments
+      </button>
+    </span>
+    <span
+      class="c5"
+      width="10%"
+    >
+      <button
+        class="c2 c3"
+        type="button"
+      >
+        Points
+      </button>
+    </span>
+    <span
+      class="c5"
+      width="10%"
+    >
+      Actions
+    </span>
+  </div>
+  <div
+    class="c6"
+  >
+    <span
+      class="c1"
+      width="40%"
+    >
+      <a
+        href="https://reactjs.org/"
+      >
+        React
+      </a>
+    </span>
+    <span
+      class="c4"
+      width="30%"
+    >
+      Jordan Walke
+    </span>
+    <span
+      class="c5"
+      width="10%"
+    >
+      3
+    </span>
+    <span
+      class="c5"
+      width="10%"
+    >
+      4
+    </span>
+    <span
+      class="c5"
+      width="10%"
+    >
+      <button
+        class="c2 c3"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-check fa-w-16 "
+          data-icon="check"
+          data-prefix="fas"
+          data-testid="dismiss"
+          focusable="false"
+          role="img"
+          viewBox="0 0 512 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+    </span>
+  </div>
+  <div
+    class="c6"
+  >
+    <span
+      class="c1"
+      width="40%"
+    >
+      <a
+        href="https://redux.js.org/"
+      >
+        Redux
+      </a>
+    </span>
+    <span
+      class="c4"
+      width="30%"
+    >
+      Dan Abramov, Andrew Clark
+    </span>
+    <span
+      class="c5"
+      width="10%"
+    >
+      2
+    </span>
+    <span
+      class="c5"
+      width="10%"
+    >
+      5
+    </span>
+    <span
+      class="c5"
+      width="10%"
+    >
+      <button
+        class="c2 c3"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-check fa-w-16 "
+          data-icon="check"
+          data-prefix="fas"
+          data-testid="dismiss"
+          focusable="false"
+          role="img"
+          viewBox="0 0 512 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+    </span>
+  </div>
 </div>
 `;

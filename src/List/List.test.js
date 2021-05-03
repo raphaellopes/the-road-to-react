@@ -20,12 +20,12 @@ describe('List', () => {
 
   test('renders the list with its properties', () => {
     render(<List {...listProps} />);
-    expect(screen.getAllByRole('button').length).toBe(2);
+    expect(screen.getAllByTestId('dismiss').length).toBe(2);
   });
 
   test('calls onRemoveItem for first item', () => {
     render(<List {...listProps} />);
-    fireEvent.click(screen.getAllByRole('button')[0]);
+    fireEvent.click(screen.getAllByTestId('dismiss')[0]);
     expect(listProps.onRemoveItem).toHaveBeenCalledTimes(1);
   });
 });

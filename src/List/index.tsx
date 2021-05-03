@@ -1,19 +1,67 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { sortBy } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { ButtonSmall } from '../styles';
-import { ListProps, ItemProps } from './types';
-import { ItemContainer, ItemColumn } from './styles';
+import { StoriesType } from '../types';
+import { ListProps, ItemProps, SortTypes, SortDictType } from './types';
+import { Header, ItemContainer, ItemColumn } from './styles';
 
-const List = ({ list, onRemoveItem }:ListProps) => (
-  <>
-    {list.map(
-      (item) => (
-        <Item key={item.objectID} onRemoveItem={onRemoveItem} item={item} />
-      )
-    )}
-  </>
-);
+const List = ({ list, onRemoveItem }:ListProps) => {
+  const [sort, setSort] = useState<SortTypes>('NONE');
+
+  const SORTS:SortDictType = {
+    NONE: (data:StoriesType) => data,
+    TITLE: (data:StoriesType) => sortBy(data, 'title'),
+    AUTHOR: (data:StoriesType) => sortBy(data, 'author'),
+    COMMENT: (data:StoriesType) => sortBy(data, 'num_comments').reverse(),
+    POINT: (data:StoriesType) => sortBy(data, 'points').reverse(),
+  };
+
+  const sortFunction = SORTS[sort];
+  const sortedList = sortFunction(list);
+
+  const handleSort = (sortKey:SortTypes) => {
+    setSort(sortKey);
+  }
+
+  const renderHeader = (
+    <Header>
+      <ItemColumn width="40%">
+        <ButtonSmall type="button" onClick={() => handleSort('TITLE')}>
+          Title
+        </ButtonSmall>
+      </ItemColumn>
+      <ItemColumn width="30%">
+        <ButtonSmall type="button" onClick={() => handleSort('AUTHOR')}>
+          Author
+        </ButtonSmall>
+      </ItemColumn>
+      <ItemColumn width="10%">
+        <ButtonSmall type="button" onClick={() => handleSort('COMMENT')}>
+          Comments
+        </ButtonSmall>
+      </ItemColumn>
+      <ItemColumn width="10%">
+        <ButtonSmall type="button" onClick={() => handleSort('POINT')}>
+          Points
+        </ButtonSmall>
+      </ItemColumn>
+      <ItemColumn width="10%">Actions</ItemColumn>
+    </Header>
+  );
+
+  return (
+    <div>
+      {renderHeader}
+      {sortedList.map(
+        (item) => (
+          <Item key={item.objectID} onRemoveItem={onRemoveItem} item={item} />
+        )
+      )}
+    </div>
+  );
+};
 
 export const Item = ({
   item,

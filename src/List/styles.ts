@@ -1,5 +1,13 @@
 import styled from 'styled-components';
 
+export const Header = styled.div`
+  display: flex;
+
+  > span {
+    font-weight: 600;
+  }
+`;
+
 export const ItemColumn = styled.span`
   ${({ width }: { width: string }) => `
     width: ${width};
