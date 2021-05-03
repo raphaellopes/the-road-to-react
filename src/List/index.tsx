@@ -20,6 +20,7 @@ const List = ({ list, onRemoveItem }:ListProps) => {
 
   const sortFunction = SORTS[sort];
   const sortedList = sortFunction(list);
+  const isActive:(value:SortTypes) => boolean = (value) => value === sort;
 
   const handleSort = (sortKey:SortTypes) => {
     setSort(sortKey);
@@ -28,22 +29,38 @@ const List = ({ list, onRemoveItem }:ListProps) => {
   const renderHeader = (
     <Header>
       <ItemColumn width="40%">
-        <ButtonSmall type="button" onClick={() => handleSort('TITLE')}>
+        <ButtonSmall
+          type="button"
+          onClick={() => handleSort('TITLE')}
+          active={isActive('TITLE')}
+        >
           Title
         </ButtonSmall>
       </ItemColumn>
       <ItemColumn width="30%">
-        <ButtonSmall type="button" onClick={() => handleSort('AUTHOR')}>
+        <ButtonSmall
+          type="button"
+          onClick={() => handleSort('AUTHOR')}
+          active={isActive('AUTHOR')}
+        >
           Author
         </ButtonSmall>
       </ItemColumn>
       <ItemColumn width="10%">
-        <ButtonSmall type="button" onClick={() => handleSort('COMMENT')}>
+        <ButtonSmall
+          type="button"
+          onClick={() => handleSort('COMMENT')}
+          active={isActive('COMMENT')}
+        >
           Comments
         </ButtonSmall>
       </ItemColumn>
       <ItemColumn width="10%">
-        <ButtonSmall type="button" onClick={() => handleSort('POINT')}>
+        <ButtonSmall
+          type="button"
+          onClick={() => handleSort('POINT')}
+          active={isActive('POINT')}
+        >
           Points
         </ButtonSmall>
       </ItemColumn>

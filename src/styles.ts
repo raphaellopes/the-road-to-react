@@ -1,21 +1,29 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const Button = styled.button`
-  background: transparent;
-  border: 1px solid #171212;
-  padding: 5px;
-  cursor: pointer;
-  transition: all 0.1s ease-in;
+const activeStyle = css`
+  background: #171212;
+  color: #ffffff;
 
-  &:hover {
-    background: #171212;
-    color: #ffffff;
-
-    > svg > g {
-      fill: #ffffff;
-      stroke: #ffffff;
-    }
+  > svg > g {
+    fill: #ffffff;
+    stroke: #ffffff;
   }
+`;
+
+export const Button = styled.button<{ active?: boolean }>`
+  ${({ active = false }) => `
+    background: transparent;
+    border: 1px solid #171212;
+    padding: 5px;
+    cursor: pointer;
+    transition: all 0.1s ease-in;
+
+    &:hover {
+      ${activeStyle};
+    }
+
+    ${active ? activeStyle : ''}
+  `}
 `;
 
 export const ButtonSmall = styled(Button)`
