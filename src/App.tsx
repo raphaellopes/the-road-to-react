@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCheck, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 
+import { ButtonSmall } from './styles';
 import { StoriesType, StoryType } from './types';
 import SearchForm from './SearchForm';
 import List from './List';
@@ -128,18 +129,35 @@ const HeadlinePrimary = styled.h1`
 
 // root component
 const App = () => {
+  const getUrl = (value: string) => `${API_ENDPOINT}${value}`;
+
   const [searchTerm, setSearchTerm] = useSemiPersistentState('search', 'React');
   const [stories, dispatchStories] = useReducer(storiesReducer, {
     data: [],
     isLoading: false,
     isError: false,
   });
-  const [url, setUrl] = useState(`${API_ENDPOINT}${searchTerm}`);
+  const [urls, setUrls] = useState<string[]>([getUrl(searchTerm)]);
   const totalComments = getSumComments(stories);
+
+  const extractSearchTerm = (url: string):string => url.replace(API_ENDPOINT, '')
+  const getLastSearches = (data: string[]) => data
+    .slice(-5)
+    .map(extractSearchTerm)
+    .filter(item => !item.includes(searchTerm))
+    .filter((item, index, current) => current.indexOf(item) === index)
+  const lastSearches = getLastSearches(urls);
+
+
+  const handleSearch = (value: string) => {
+    const url = getUrl(value);
+    setUrls(urls.concat(url));
+  }
 
   const handleFetchStories = useCallback(async () => {
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
-    const result = await axios.get(url);
+    const lastUrl = urls[urls.length - 1];
+    const result = await axios.get(lastUrl);
     try {
       dispatchStories({
         type: 'STORIES_FETCH_SUCCESS',
@@ -148,7 +166,7 @@ const App = () => {
     } catch {
       dispatchStories({ type: 'STORIES_FETCH_FAILURE' });
     }
-  }, [url])
+  }, [urls])
 
   useEffect(() => {
     handleFetchStories();
@@ -160,7 +178,7 @@ const App = () => {
 
   const handleSearchSubmit = (e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setUrl(`${API_ENDPOINT}${searchTerm}`);
+    handleSearch(searchTerm);
   }
 
   const handleRemoveStory = (item:StoryType) => {
@@ -169,6 +187,24 @@ const App = () => {
       payload: item
     });
   };
+
+  const handleLastSearch = (value:string) => {
+    handleSearch(value);
+    setSearchTerm(value);
+  }
+
+  // renders
+  const renderLastSearches = lastSearches.map(
+    (item, index) => (
+      <ButtonSmall
+        key={item + index}
+        type="button"
+        onClick={() => handleLastSearch(item)}
+      >
+        {item}
+      </ButtonSmall>
+    )
+  );
 
   return (
     <Container>
@@ -181,6 +217,8 @@ const App = () => {
         onSearchInput={handleSearchInput}
         onSearchSubmit={handleSearchSubmit}
       />
+
+      {renderLastSearches}
 
 
       {stories.isError && (<p>Something went wrong ...</p>)}
