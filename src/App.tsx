@@ -7,10 +7,10 @@ import styled from 'styled-components';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCheck, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 
-import { ButtonSmall } from './styles';
 import { StoriesType, StoryType } from './types';
 import SearchForm from './SearchForm';
 import List from './List';
+import LastSearches from './LastSearches';
 
 library.add(faCheck, faArrowUp, faArrowDown);
 
@@ -142,10 +142,26 @@ const App = () => {
 
   const extractSearchTerm = (url: string):string => url.replace(API_ENDPOINT, '')
   const getLastSearches = (data: string[]) => data
-    .slice(-5)
-    .map(extractSearchTerm)
-    .filter(item => !item.includes(searchTerm))
-    .filter((item, index, current) => current.indexOf(item) === index)
+    .reduce((result:string[], url, index) => {
+      const term = extractSearchTerm(url);
+
+      if (index === 0) {
+        return result.concat(term);
+      }
+
+      const previousSearchTerm = result[result.length - 1];
+
+      if (term === previousSearchTerm) {
+        return result;
+      } else {
+        return result.concat(term);
+      }
+    }, [])
+    .slice(-6)
+    .slice(0, -1)
+    // .map(extractSearchTerm)
+    // .filter(item => !item.includes(searchTerm))
+    // .filter((item, index, current) => current.indexOf(item) === index)
   const lastSearches = getLastSearches(urls);
 
 
@@ -194,18 +210,6 @@ const App = () => {
   }
 
   // renders
-  const renderLastSearches = lastSearches.map(
-    (item, index) => (
-      <ButtonSmall
-        key={item + index}
-        type="button"
-        onClick={() => handleLastSearch(item)}
-      >
-        {item}
-      </ButtonSmall>
-    )
-  );
-
   return (
     <Container>
       <HeadlinePrimary>
@@ -218,7 +222,10 @@ const App = () => {
         onSearchSubmit={handleSearchSubmit}
       />
 
-      {renderLastSearches}
+      {lastSearches.length > 0 && <LastSearches
+        lastSearches={lastSearches}
+        onLastSearch={handleLastSearch}
+      />}
 
 
       {stories.isError && (<p>Something went wrong ...</p>)}

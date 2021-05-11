@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LastSearches renders snapshot 1`] = `
+.c1 {
+  background: transparent;
+  border: 1px solid #171212;
+  padding: 5px;
+  cursor: pointer;
+  -webkit-transition: all 0.1s ease-in;
+  transition: all 0.1s ease-in;
+}
+
+.c1:hover {
+  background: #171212;
+  color: #ffffff;
+}
+
+.c1:hover > svg > g {
+  fill: #ffffff;
+  stroke: #ffffff;
+}
+
+.c2 {
+  padding: 5px;
+}
+
+.c0 {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+
+.c0 > button:not(:last-child) {
+  margin-right: 8px;
+}
+
+<div
+  class="c0"
+>
+  <h3
+    class=""
+  >
+    Last searches:
+  </h3>
+  <button
+    class="c1 c2"
+    type="button"
+  >
+    React
+  </button>
+  <button
+    class="c1 c2"
+    type="button"
+  >
+    Redux
+  </button>
+</div>
+`;
