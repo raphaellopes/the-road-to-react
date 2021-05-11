@@ -1,5 +1,20 @@
 import styled, { css } from 'styled-components';
 
+export const Container = styled.div`
+  min-height: 100vh;
+  padding: 20px;
+  background: #83a4d4; /* fallback */
+  background: linear-gradient(to left, #b6fbff, #83a4d4);
+  color: #171212;
+`;
+
+export const HeadlinePrimary = styled.h1`
+  font-size: 48px;
+  font-weight: 300;
+  letter-spacing: 2px;
+`;
+
+// buttons
 const activeStyle = css`
   background: #171212;
   color: #ffffff;

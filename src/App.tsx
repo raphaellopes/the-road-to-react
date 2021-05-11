@@ -3,10 +3,10 @@ import {
   useState, useEffect, useReducer, useCallback, useRef
 } from 'react';
 import axios from 'axios';
-import styled from 'styled-components';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCheck, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 
+import { Container, HeadlinePrimary, ButtonLarge } from './styles';
 import { StoriesType, StoryType } from './types';
 import SearchForm from './SearchForm';
 import List from './List';
@@ -14,7 +14,10 @@ import LastSearches from './LastSearches';
 
 library.add(faCheck, faArrowUp, faArrowDown);
 
-const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
+const API_BASE = 'https://hn.algolia.com/api/v1';
+const API_SEARCH = '/search';
+const PARAM_SEARCH = 'query=';
+const PARAM_PAGE = 'page=';
 
 // types
 
@@ -32,13 +35,17 @@ type StoriesStateType = {
   data: StoriesType;
   isLoading: boolean;
   isError: boolean;
+  page: number
 }
 interface StoriesFetchInitActionType {
   type: 'STORIES_FETCH_INIT';
 }
 interface StoriesFetchSuccessActionType {
   type: 'STORIES_FETCH_SUCCESS';
-  payload: StoriesType;
+  payload: {
+    list: StoriesType;
+    page: number
+  }
 }
 interface StoriesFetchFailureActionType {
   type: 'STORIES_FETCH_FAILURE';
@@ -65,11 +72,13 @@ const storiesReducer = (
         isError: false,
       }
     case 'STORIES_FETCH_SUCCESS':
+      const { list, page } = action.payload;
       return {
         ...state,
         isLoading: false,
         isError: false,
-        data: action.payload,
+        data: page === 0 ? list : state.data.concat(list),
+        page
       };
     case 'STORIES_FETCH_FAILURE':
       return {
@@ -108,39 +117,26 @@ const useSemiPersistentState = (
   return [value, setValue];
 }
 
-// styled-components
-const Container = styled.div`
-  height: 100vh;
-  padding: 20px;
-  background: #83a4d4; /* fallback */
-  background: linear-gradient(to left, #b6fbff, #83a4d4);
-  color: #171212;
-`;
-
-const HeadlinePrimary = styled.h1`
-  font-size: 48px;
-  font-weight: 300;
-  letter-spacing: 2px;
-`;
-
-
-
-
-
 // root component
 const App = () => {
-  const getUrl = (value: string) => `${API_ENDPOINT}${value}`;
+  const getUrl = (value: string, page:number) =>
+    `${API_BASE}${API_SEARCH}?${PARAM_SEARCH}${value}&${PARAM_PAGE}${page}`;
 
   const [searchTerm, setSearchTerm] = useSemiPersistentState('search', 'React');
   const [stories, dispatchStories] = useReducer(storiesReducer, {
     data: [],
     isLoading: false,
     isError: false,
+    page: 0,
   });
-  const [urls, setUrls] = useState<string[]>([getUrl(searchTerm)]);
+  const [urls, setUrls] = useState<string[]>([getUrl(searchTerm, 0)]);
   const totalComments = getSumComments(stories);
 
-  const extractSearchTerm = (url: string):string => url.replace(API_ENDPOINT, '')
+  const extractSearchTerm = (url: string):string =>
+    url
+      .substring(url.lastIndexOf('?') + 1, url.lastIndexOf('&'))
+      .replace(PARAM_SEARCH, '');
+
   const getLastSearches = (data: string[]) => data
     .reduce((result:string[], url, index) => {
       const term = extractSearchTerm(url);
@@ -165,8 +161,8 @@ const App = () => {
   const lastSearches = getLastSearches(urls);
 
 
-  const handleSearch = (value: string) => {
-    const url = getUrl(value);
+  const handleSearch = (value: string, page: number) => {
+    const url = getUrl(value, page);
     setUrls(urls.concat(url));
   }
 
@@ -177,7 +173,10 @@ const App = () => {
     try {
       dispatchStories({
         type: 'STORIES_FETCH_SUCCESS',
-        payload: result.data.hits
+        payload: {
+          list: result.data.hits,
+          page: result.data.page
+        }
       });
     } catch {
       dispatchStories({ type: 'STORIES_FETCH_FAILURE' });
@@ -194,7 +193,7 @@ const App = () => {
 
   const handleSearchSubmit = (e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    handleSearch(searchTerm);
+    handleSearch(searchTerm, 0);
   }
 
   const handleRemoveStory = (item:StoryType) => {
@@ -205,8 +204,14 @@ const App = () => {
   };
 
   const handleLastSearch = (value:string) => {
-    handleSearch(value);
+    handleSearch(value, 0);
     setSearchTerm(value);
+  }
+
+  const handleMore = () => {
+    const lastUrl = urls[urls.length - 1];
+    const term = extractSearchTerm(lastUrl);
+    handleSearch(term, stories.page + 1);
   }
 
   // renders
@@ -229,11 +234,18 @@ const App = () => {
 
 
       {stories.isError && (<p>Something went wrong ...</p>)}
+
+      <List
+        list={stories.data}
+        onRemoveItem={handleRemoveStory}
+      />
+
       {stories.isLoading ? (<p>Loading ...</p>) : (
-        <List
-          list={stories.data}
-          onRemoveItem={handleRemoveStory}
-        />
+        <ButtonLarge
+          onClick={handleMore}
+        >
+          More
+        </ButtonLarge>
       )}
 
     </Container>

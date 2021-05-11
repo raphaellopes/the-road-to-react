@@ -23,8 +23,14 @@ describe('storiesReducer', () => {
   });
 
   test('should put the data value when the success is called', () => {
-    const action = { type: 'STORIES_FETCH_SUCCESS', payload: stories };
-    const state = { data: [], isLoading: true, isError: false};
+    const action = {
+      type: 'STORIES_FETCH_SUCCESS',
+      payload: {
+        list: stories,
+        page: 0
+      }
+    };
+    const state = { data: [], isLoading: true, isError: false, page: 0};
     const newState = storiesReducer(state, action);
     const expectedState = { ...state, data: stories, isLoading: false};
     expect(newState).toStrictEqual(expectedState);
@@ -115,7 +121,8 @@ describe('App', () => {
 
     const javaScripPromise = Promise.resolve({
       data: {
-        hits: [anotherStory]
+        hits: [anotherStory],
+        page: 0
       }
     });
 
