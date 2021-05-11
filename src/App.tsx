@@ -1,13 +1,15 @@
 import {
   ChangeEvent, FormEvent,
-  useState, useEffect, useReducer, useCallback, useRef
+  useState, useEffect, useReducer, useCallback
 } from 'react';
 import axios from 'axios';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCheck, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 
+import { storiesReducer } from './store';
+import { useSemiPersistentState } from './hooks';
 import { Container, HeadlinePrimary, ButtonLarge } from './styles';
-import { StoriesType, StoryType } from './types';
+import { StoryType } from './types';
 import SearchForm from './SearchForm';
 import List from './List';
 import LastSearches from './LastSearches';
@@ -19,105 +21,6 @@ const API_SEARCH = '/search';
 const PARAM_SEARCH = 'query=';
 const PARAM_PAGE = 'page=';
 
-// types
-
-
-// @TODO: add correct type
-const getSumComments = (stories:any) => {
-  return stories.data.reduce(
-    (result:number, value:any) => result + value.num_comments,
-    0
-  );
-}
-
-// reducer
-type StoriesStateType = {
-  data: StoriesType;
-  isLoading: boolean;
-  isError: boolean;
-  page: number
-}
-interface StoriesFetchInitActionType {
-  type: 'STORIES_FETCH_INIT';
-}
-interface StoriesFetchSuccessActionType {
-  type: 'STORIES_FETCH_SUCCESS';
-  payload: {
-    list: StoriesType;
-    page: number
-  }
-}
-interface StoriesFetchFailureActionType {
-  type: 'STORIES_FETCH_FAILURE';
-}
-interface StoriesRemoveActionType {
-  type: 'REMOVE_STORY';
-  payload: StoryType;
-}
-type StoriesActionType =
-  | StoriesFetchInitActionType
-  | StoriesFetchSuccessActionType
-  | StoriesFetchFailureActionType
-  | StoriesRemoveActionType;
-
-const storiesReducer = (
-  state: StoriesStateType,
-  action: StoriesActionType
-) => {
-  switch(action.type) {
-    case 'STORIES_FETCH_INIT':
-      return {
-        ...state,
-        isLoading: true,
-        isError: false,
-      }
-    case 'STORIES_FETCH_SUCCESS':
-      const { list, page } = action.payload;
-      return {
-        ...state,
-        isLoading: false,
-        isError: false,
-        data: page === 0 ? list : state.data.concat(list),
-        page
-      };
-    case 'STORIES_FETCH_FAILURE':
-      return {
-        ...state,
-        isLoading: false,
-        isError: true,
-      };
-    case 'REMOVE_STORY':
-      return {
-        ...state,
-        data: state.data.filter(
-          story => story.objectID !== action.payload.objectID
-        ),
-      };
-    default:
-      throw new Error();
-  }
-}
-
-// hooks
-const useSemiPersistentState = (
-  key:string,
-  initialValue:string
-):[string, (newValue:string) => void] => {
-  const isMounted = useRef(false);
-  const [value, setValue] = useState(localStorage.getItem(key) || initialValue);
-
-  useEffect(() => {
-    if (!isMounted.current) {
-      isMounted.current = true;
-    } else {
-      localStorage.setItem(key, value);
-    }
-  }, [value, key]);
-
-  return [value, setValue];
-}
-
-// root component
 const App = () => {
   const getUrl = (value: string, page:number) =>
     `${API_BASE}${API_SEARCH}?${PARAM_SEARCH}${value}&${PARAM_PAGE}${page}`;
@@ -130,7 +33,10 @@ const App = () => {
     page: 0,
   });
   const [urls, setUrls] = useState<string[]>([getUrl(searchTerm, 0)]);
-  const totalComments = getSumComments(stories);
+  const totalComments = stories.data.reduce(
+    (result:number, value:any) => result + value.num_comments,
+    0
+  );
 
   const extractSearchTerm = (url: string):string =>
     url
@@ -253,4 +159,3 @@ const App = () => {
 }
 
 export default App;
-export { storiesReducer, SearchForm, List }
